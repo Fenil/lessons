@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn with Button!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #f0f9ff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            background-color: #dbeafe;
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+        .tab.active {
+            background-color: #bfdbfe;
+            color: #1e40af;
+        }
+        canvas {
+            background-color: #e0f2fe; /* Light blue sky */
+            border-radius: 8px;
+            border: 4px dashed #3b82f6;
+            width: 100%;
+        }
+        .button-style {
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-style:hover {
+            background-color: #2563eb;
+        }
+        .button-style:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .info-panel {
+            background-color: #e0f2fe;
+            border: 2px solid #7dd3fc;
+        }
+        .physics-menu a {
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .physics-menu a.active {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+        }
+         .physics-menu a:hover {
+            background-color: #93c5fd;
+            color: #1e3a8a;
+        }
+        .physics-game-content {
+            display: none;
+        }
+        .physics-game-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 max-w-6xl text-center">
+
+        <header class="mb-8">
+            <h1 class="text-5xl font-bold text-blue-800">Learn with Button!</h1>
+            <p class="text-xl mt-2 text-blue-600">Your friendly guide to Math and Physics!</p>
+        </header>
+
+        <div class="flex justify-center mb-4 border-b-2 border-blue-300">
+            <div class="tab active" onclick="showTab('home')">Home</div>
+            <div class="tab" onclick="showTab('physics')">Physics Fun</div>
+            <div class="tab" onclick="showTab('math')">Math Symbols</div>
+        </div>
+
+        <!-- Home Section -->
+        <div id="home" class="tab-content active p-6 bg-blue-100 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-blue-700 mb-4">Meet Button!</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center">
+                <div style="font-size: 5rem; margin-right: 1rem;">🐶</div>
+                <p class="text-lg text-left">
+                    Woof! I'm Button! I love digging for bones and... discovering the secrets of the universe! Join me on an adventure to learn about cool things like why stuff moves and what those funny-looking Greek letters mean in math. Let's have some fun!
+                </p>
+            </div>
+        </div>
+
+        <!-- Physics Section -->
+        <div id="physics" class="tab-content p-6 bg-blue-100 rounded-lg shadow-lg">
+            <div class="flex flex-col md:flex-row gap-6">
+                <!-- Left Menu Bar -->
+                <div class="w-full md:w-1/4 p-4 bg-blue-200 rounded-lg physics-menu text-left">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-4">Laws of Motion</h3>
+                    <ul class="space-y-2">
+                        <li><a onclick="showPhysicsGame('law1')" class="block p-2 rounded-lg active">Newton's First Law</a></li>
+                        <li><a onclick="showPhysicsGame('law2')" class="block p-2 rounded-lg">Newton's Second Law</a></li>
+                        <li><a onclick="showPhysicsGame('law3')" class="block p-2 rounded-lg">Newton's Third Law</a></li>
+                    </ul>
+                </div>
+
+                <!-- Right Content Area -->
+                <div class="w-full md:w-3/4">
+                    <!-- Game for Law 1 -->
+                    <div id="law1" class="physics-game-content active">
+                        <h2 class="text-3xl font-bold text-blue-700 mb-2">Newton's First Law</h2>
+                        <p class="mb-4 text-lg">An object won't move unless a force (a push or a pull) acts on it.</p>
+                        <div class="flex flex-col lg:flex-row gap-6 items-start">
+                            <div class="w-full lg:w-2/3">
+                                <canvas id="newtonCanvas1" width="600" height="350"></canvas>
+                                <div id="button-controls1" class="mt-4 flex justify-center space-x-4">
+                                    <button class="button-style" onclick="startPush1()">Push Cart</button>
+                                    <button class="button-style" onclick="startPull1()">Pull Cart</button>
+                                    <button class="button-style" onclick="resetGame1()">Reset</button>
+                                </div>
+                                <p id="explanation1" class="mt-4 text-lg font-semibold text-blue-800 h-12"></p>
+                            </div>
+                            <div class="w-full lg:w-1/3 p-4 rounded-lg info-panel text-left">
+                                <h3 class="text-2xl font-bold text-blue-700 mb-4">Key Concepts</h3>
+                                <div class="space-y-4">
+                                    <div><h4 class="font-bold text-xl text-blue-600">Force (F)</h4><p>A force is a push or a pull.</p></div>
+                                    <div><h4 class="font-bold text-xl text-blue-600">Mass (m)</h4><p>Mass is how much "stuff" an object is made of.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Game for Law 2 -->
+                    <div id="law2" class="physics-game-content">
+                        <h2 class="text-3xl font-bold text-blue-700 mb-2">Newton's Second Law</h2>
+                        <p class="mb-4 text-lg">It takes more force to accelerate a bigger mass. Try pushing two different carts!</p>
+                        <div class="flex flex-col lg:flex-row gap-6 items-start">
+                            <div class="w-full lg:w-2/3">
+                                <canvas id="newtonCanvas2" width="600" height="350"></canvas>
+                                <div id="button-controls2" class="mt-4 flex justify-center space-x-4">
+                                    <button class="button-style" onclick="pushSmallCart()">Push Small Cart</button>
+                                    <button class="button-style" onclick="pushBigCart()">Push Big Cart</button>
+                                    <button class="button-style" onclick="resetGame2()">Reset</button>
+                                </div>
+                                <p id="explanation2" class="mt-4 text-lg font-semibold text-blue-800 h-12"></p>
+                            </div>
+                             <div class="w-full lg:w-1/3 p-4 rounded-lg info-panel text-left">
+                                <h3 class="text-2xl font-bold text-blue-700 mb-4">Key Concepts</h3>
+                                <div class="space-y-4">
+                                    <div><h4 class="font-bold text-xl text-blue-600">F = m<span class="italic">a</span></h4><p>Force = mass × acceleration.</p></div>
+                                    <div><h4 class="font-bold text-xl text-blue-600">Acceleration (a)</h4><p>How fast something speeds up.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Game for Law 3 -->
+                    <div id="law3" class="physics-game-content">
+                        <h2 class="text-3xl font-bold text-blue-700 mb-2">Newton's Third Law</h2>
+                        <p class="mb-4 text-lg">A rocket pushes exhaust down (Action). The exhaust pushes the rocket up (Reaction). Let's watch!</p>
+                        <div class="flex flex-col lg:flex-row gap-6 items-start">
+                            <div class="w-full lg:w-2/3">
+                                <canvas id="newtonCanvas3" width="600" height="350"></canvas>
+                                <div id="button-controls3" class="mt-4 flex justify-center space-x-4">
+                                    <button id="launch-button" class="button-style">Hold to Thrust!</button>
+                                    <button class="button-style" onclick="resetGame3()">Reset</button>
+                                </div>
+                                <p id="explanation3" class="mt-4 text-lg font-semibold text-blue-800 h-12"></p>
+                            </div>
+                             <div class="w-full lg:w-1/3 p-4 rounded-lg info-panel text-left">
+                                <h3 class="text-2xl font-bold text-blue-700 mb-4">Key Concepts</h3>
+                                <div class="space-y-4">
+                                    <div><h4 class="font-bold text-xl text-blue-600">Action</h4><p>The rocket pushes hot gas down.</p></div>
+                                    <div><h4 class="font-bold text-xl text-blue-600">Reaction</h4><p>The hot gas pushes the rocket up!</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Math Section -->
+        <div id="math" class="tab-content p-6 bg-blue-100 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-blue-700 mb-4">Greek Math Symbols</h2>
+            <p class="text-lg">This section is under construction! Button is busy fetching the symbols. Check back soon! 🚧</p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Global Navigation ---
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function showPhysicsGame(lawId) {
+            document.querySelectorAll('.physics-game-content').forEach(g => g.classList.remove('active'));
+            document.getElementById(lawId).classList.add('active');
+            document.querySelectorAll('.physics-menu a').forEach(a => a.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            resetGame1(); resetGame2(); resetGame3();
+        }
+
+        // --- Shared Drawing Functions ---
+        function drawGround(ctx) { ctx.fillStyle = '#6B8E23'; ctx.fillRect(0, 330, ctx.canvas.width, 20); }
+        function drawDog(ctx, dog, gameState) {
+            ctx.save(); ctx.translate(dog.x, dog.y); ctx.scale(0.7, 0.7); ctx.save();
+            if (gameState === 'pulling') { ctx.scale(-1, 1); }
+            ctx.fillStyle = 'black'; ctx.fillRect(-20, 35, 10, 8); ctx.fillRect(10, 35, 10, 8);
+            ctx.fillStyle = 'white'; ctx.fillRect(-20, 43, 10, 5); ctx.fillRect(10, 43, 10, 5);
+            ctx.fillStyle = '#A0522D'; ctx.beginPath(); ctx.ellipse(0, 20, 35, 25, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'white'; ctx.beginPath(); ctx.ellipse(-10, 15, 10, 8, Math.PI / 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(10, 30, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+            ctx.font = '60px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🐶', 25, 5);
+            ctx.restore();
+        }
+
+        // --- Game 1: Newton's First Law ---
+        const canvas1 = document.getElementById('newtonCanvas1'), ctx1 = canvas1.getContext('2d'), explanation1 = document.getElementById('explanation1'), btnControls1 = document.getElementById('button-controls1');
+        let cart1 = { x: 50, y: 270, width: 80, height: 50, speed: 0 }, dog1 = { x: -60, y: 290, width: 67 }, gameState1 = 'idle';
+        function drawCart1() { ctx1.fillStyle = '#d9534f'; ctx1.fillRect(cart1.x, cart1.y, cart1.width, cart1.height); ctx1.fillStyle = '#555'; ctx1.beginPath(); ctx1.arc(cart1.x + 20, cart1.y + cart1.height + 10, 10, 0, Math.PI * 2); ctx1.arc(cart1.x + 60, cart1.y + cart1.height + 10, 10, 0, Math.PI * 2); ctx1.fill(); ctx1.save(); ctx1.fillStyle = 'white'; ctx1.font = 'bold 22px "Comic Neue", cursive'; ctx1.textAlign = 'center'; ctx1.textBaseline = 'middle'; ctx1.fillText('m', cart1.x + cart1.width / 2, cart1.y + cart1.height / 2 + 2); ctx1.restore(); }
+        function drawForce1() { if (gameState1 === 'pushing' || gameState1 === 'pulling') { ctx1.save(); ctx1.fillStyle = '#1d4ed8'; ctx1.font = 'bold 30px "Comic Neue", cursive'; ctx1.textAlign = 'center'; ctx1.textBaseline = 'middle'; const forceY = cart1.y - 20; if (gameState1 === 'pushing') ctx1.fillText('F →', cart1.x - 25, forceY); else ctx1.fillText('← F', cart1.x + cart1.width + 25, forceY); ctx1.restore(); } }
+        function gameLoop1() {
+            ctx1.clearRect(0, 0, canvas1.width, canvas1.height); drawGround(ctx1);
+            if (gameState1 === 'preparing-push' && dog1.x < cart1.x - (dog1.width / 2)) dog1.x += 1.5;
+            else if (gameState1 === 'preparing-push') { gameState1 = 'pushing'; cart1.speed = 1; explanation1.textContent = "Button is PUSHING the cart!"; }
+            if (gameState1 === 'pushing') {
+                cart1.x += cart1.speed; dog1.x = cart1.x - (dog1.width / 2);
+                if (cart1.x + cart1.width >= canvas1.width) { cart1.x = canvas1.width - cart1.width; dog1.x = cart1.x - (dog1.width / 2); cart1.speed = 0; gameState1 = 'idle'; btnControls1.children[0].disabled = false; btnControls1.children[1].disabled = false; explanation1.textContent = "Great PUSH, Button!"; }
+            }
+            if (gameState1 === 'pulling') {
+                cart1.x += cart1.speed; dog1.x = cart1.x + cart1.width + (dog1.width / 2);
+                if (cart1.x <= 50) { cart1.x = 50; cart1.speed = 0; gameState1 = 'idle'; btnControls1.children[0].disabled = false; btnControls1.children[1].disabled = false; explanation1.textContent = "Great PULL, Button!"; }
+            }
+            drawCart1(); drawDog(ctx1, dog1, gameState1); drawForce1(); requestAnimationFrame(gameLoop1);
+        }
+        function startPush1() { if (gameState1 !== 'idle') return; resetGame1(); gameState1 = 'preparing-push'; btnControls1.children[0].disabled = true; btnControls1.children[1].disabled = true; explanation1.textContent = "The cart is at rest..."; setTimeout(() => { explanation1.textContent = "Here comes Button to give it a push!"; }, 1500); }
+        function startPull1() { if (gameState1 !== 'idle') return; resetGame1(); cart1.x = canvas1.width - cart1.width - 1; dog1.x = cart1.x + cart1.width + (dog1.width / 2); cart1.speed = -1; gameState1 = 'pulling'; btnControls1.children[0].disabled = true; btnControls1.children[1].disabled = true; explanation1.textContent = "Now Button will PULL the cart back!"; }
+        function resetGame1() { cart1.x = 50; cart1.speed = 0; dog1.x = -60; gameState1 = 'idle'; btnControls1.children[0].disabled = false; btnControls1.children[1].disabled = false; explanation1.textContent = ""; }
+        
+        // --- Game 2: Newton's Second Law ---
+        const canvas2 = document.getElementById('newtonCanvas2'), ctx2 = canvas2.getContext('2d'), explanation2 = document.getElementById('explanation2'), btnControls2 = document.getElementById('button-controls2');
+        let smallCart = { x: 50, y: 280, width: 60, height: 40, speed: 0, mass: 1 }, bigCart = { x: 50, y: 180, width: 100, height: 80, speed: 0, mass: 3 }, dog2 = { x: -100, y: 290, width: 67 }, gameState2 = 'idle';
+        function drawCarts2() { ctx2.fillStyle = '#3498db'; ctx2.fillRect(smallCart.x, smallCart.y, smallCart.width, smallCart.height); ctx2.fillStyle = 'white'; ctx2.font = 'bold 18px "Comic Neue"'; ctx2.textAlign = 'center'; ctx2.fillText('m', smallCart.x + smallCart.width / 2, smallCart.y + smallCart.height / 2); ctx2.fillStyle = '#e74c3c'; ctx2.fillRect(bigCart.x, bigCart.y, bigCart.width, bigCart.height); ctx2.fillStyle = 'white'; ctx2.font = 'bold 36px "Comic Neue"'; ctx2.fillText('M', bigCart.x + bigCart.width / 2, bigCart.y + bigCart.height / 2); }
+        function drawForce2(cart) { ctx2.save(); ctx2.fillStyle = '#1d4ed8'; ctx2.font = 'bold 30px "Comic Neue", cursive'; ctx2.textAlign = 'center'; ctx2.textBaseline = 'middle'; const forceY = cart.y - 20; const forceX = cart.x - 25; ctx2.fillText('F →', forceX, forceY); ctx2.restore(); }
+        function gameLoop2() {
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height); drawGround(ctx2);
+            if (gameState2 === 'pushing-small') {
+                smallCart.speed += (1 / smallCart.mass) * 0.1; smallCart.x += smallCart.speed; dog2.x = smallCart.x - (dog2.width / 2);
+                if (smallCart.x + smallCart.width >= canvas2.width) { smallCart.x = canvas2.width - smallCart.width; gameState2 = 'idle'; btnControls2.children[0].disabled = false; btnControls2.children[1].disabled = false; }
+            }
+            if (gameState2 === 'pushing-big') {
+                bigCart.speed += (1 / bigCart.mass) * 0.1; bigCart.x += bigCart.speed; dog2.x = bigCart.x - (dog2.width / 2);
+                if (bigCart.x + bigCart.width >= canvas2.width) { bigCart.x = canvas2.width - bigCart.width; gameState2 = 'idle'; btnControls2.children[0].disabled = false; btnControls2.children[1].disabled = false; }
+            }
+            drawCarts2();
+            if (gameState2 === 'pushing-small') { dog2.y = smallCart.y + smallCart.height - 40; drawDog(ctx2, dog2, gameState2); drawForce2(smallCart); }
+            else if (gameState2 === 'pushing-big') { dog2.y = bigCart.y + bigCart.height - 40; drawDog(ctx2, dog2, gameState2); drawForce2(bigCart); }
+            requestAnimationFrame(gameLoop2);
+        }
+        function pushSmallCart() { if (gameState2 !== 'idle') return; resetGame2(); gameState2 = 'pushing-small'; btnControls2.children[0].disabled = true; btnControls2.children[1].disabled = true; explanation2.textContent = "Same force, small mass... fast acceleration!"; }
+        function pushBigCart() { if (gameState2 !== 'idle') return; resetGame2(); gameState2 = 'pushing-big'; btnControls2.children[0].disabled = true; btnControls2.children[1].disabled = true; explanation2.textContent = "Same force, big mass... slow acceleration!"; }
+        function resetGame2() { smallCart.x = 50; smallCart.speed = 0; bigCart.x = 50; bigCart.speed = 0; dog2.x = -100; gameState2 = 'idle'; btnControls2.children[0].disabled = false; btnControls2.children[1].disabled = false; explanation2.textContent = ""; }
+
+        // --- Game 3: Newton's Third Law (Rocket) ---
+        const canvas3 = document.getElementById('newtonCanvas3'), ctx3 = canvas3.getContext('2d'), explanation3 = document.getElementById('explanation3'), launchButton = document.getElementById('launch-button');
+        const groundLevel3 = 330, gravity3 = 0.015;
+        let dog3 = { x: 100, y: 290 }, rocket = { x: 300, y: groundLevel3 - 80, vy: 0, height: 80, width: 40 }, isThrusting = false, exhaustParticles = [];
+        
+        function drawRocket() {
+            const r = rocket;
+            ctx3.fillStyle = '#d9534f';
+            ctx3.beginPath(); ctx3.moveTo(r.x - r.width/2, r.y + r.height); ctx3.lineTo(r.x - r.width, r.y + r.height); ctx3.lineTo(r.x - r.width/2, r.y + r.height - 20); ctx3.closePath(); ctx3.fill();
+            ctx3.beginPath(); ctx3.moveTo(r.x + r.width/2, r.y + r.height); ctx3.lineTo(r.x + r.width, r.y + r.height); ctx3.lineTo(r.x + r.width/2, r.y + r.height - 20); ctx3.closePath(); ctx3.fill();
+            ctx3.fillStyle = '#bdc3c7'; ctx3.fillRect(r.x - r.width/2, r.y, r.width, r.height);
+            ctx3.fillStyle = '#e74c3c';
+            ctx3.beginPath(); ctx3.moveTo(r.x - r.width/2, r.y); ctx3.lineTo(r.x + r.width/2, r.y); ctx3.lineTo(r.x, r.y - 30); ctx3.closePath(); ctx3.fill();
+        }
+
+        function drawExhaust() {
+            exhaustParticles.forEach(p => {
+                p.y += p.vy; p.x += p.vx; p.life--;
+                ctx3.fillStyle = `rgba(${p.r}, ${p.g}, 60, ${p.life / 50})`;
+                ctx3.beginPath(); ctx3.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx3.fill();
+            });
+            exhaustParticles = exhaustParticles.filter(p => p.life > 0);
+        }
+
+        function createExhaust() {
+            for (let i = 0; i < 5; i++) {
+                exhaustParticles.push({
+                    x: rocket.x + (Math.random() - 0.5) * 20, y: rocket.y + rocket.height,
+                    vx: (Math.random() - 0.5) * 2, vy: Math.random() * 3 + 3,
+                    size: Math.random() * 10 + 5, r: 255, g: Math.floor(Math.random() * 150), life: 50
+                });
+            }
+        }
+        
+        function drawActionReaction3() {
+            if (isThrusting) {
+                ctx3.save();
+                ctx3.fillStyle = '#1e3a8a'; // Dark blue for better contrast
+                ctx3.font = 'bold 24px "Comic Neue"';
+                ctx3.textAlign = 'left'; // Align text to the left
+                const labelX = rocket.x + rocket.width; // Position to the right of the rocket
+                ctx3.fillText('↑ Reaction', labelX, rocket.y - 50);
+                ctx3.fillText('↓ Action', labelX, rocket.y + rocket.height + 40);
+                ctx3.restore();
+            }
+        }
+
+        function gameLoop3() {
+            ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
+            drawGround(ctx3);
+            
+            if (isThrusting) {
+                rocket.vy -= 0.025;
+                createExhaust();
+                explanation3.textContent = "Action and Reaction!";
+            }
+            
+            if (rocket.y < groundLevel3 - rocket.height || rocket.vy < 0) {
+                rocket.vy += gravity3;
+            } else {
+                rocket.vy = 0;
+                rocket.y = groundLevel3 - rocket.height;
+            }
+
+            rocket.y += rocket.vy;
+            
+            if (rocket.y < -150) {
+                explanation3.textContent = "Wow! Look at it go!";
+            }
+
+            drawExhaust();
+            drawRocket();
+            drawDog(ctx3, dog3, 'watching');
+            drawActionReaction3();
+            requestAnimationFrame(gameLoop3);
+        }
+
+        launchButton.addEventListener('mousedown', () => { isThrusting = true; });
+        launchButton.addEventListener('mouseup', () => { isThrusting = false; });
+        launchButton.addEventListener('mouseleave', () => { isThrusting = false; }); // Stop if mouse leaves button
+        launchButton.addEventListener('touchstart', (e) => { e.preventDefault(); isThrusting = true; });
+        launchButton.addEventListener('touchend', (e) => { e.preventDefault(); isThrusting = false; });
+
+
+        function resetGame3() {
+            rocket.y = groundLevel3 - 80;
+            rocket.vy = 0;
+            exhaustParticles = [];
+            isThrusting = false;
+            explanation3.textContent = "";
+        }
+
+        // Initial load
+        window.onload = () => {
+            gameLoop1();
+            gameLoop2();
+            gameLoop3();
+        };
+    </script>
+
+</body>
+</html>
